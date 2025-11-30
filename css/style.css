@@ -518,3 +518,159 @@ footer {
 .bs-tooltip-top .arrow::before {
     border-top-color: var(--accent-primary);
 }
+
+/* ============================================
+   RESPONSIVE - Mobile First
+   ============================================ */
+
+/* Tablets and smaller (max 768px) */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    #salaryForm, #resultatCalcul {
+        padding: 1.5rem !important;
+    }
+    
+    .result-total .result-value {
+        font-size: 1.6rem;
+    }
+}
+
+/* Mobile phones (max 576px) */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+        line-height: 1.3;
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    #salaryForm, #resultatCalcul {
+        padding: 1rem !important;
+        border-radius: var(--radius-md);
+    }
+    
+    /* Toggle label and switch side by side */
+    .form-group .d-flex.justify-content-between {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .form-group .d-flex.justify-content-between > label.mb-0 {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    /* Results section - prevent overlap */
+    .result-item {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 10px 12px;
+    }
+    
+    .result-label {
+        flex: 1 1 100%;
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+    }
+    
+    .result-value {
+        flex: 1 1 100%;
+        text-align: right;
+        font-size: 1rem;
+    }
+    
+    /* Highlighted rows - keep side by side when possible */
+    .result-item.result-highlight .result-label,
+    .result-item.result-highlight .result-value {
+        flex: 1 1 auto;
+    }
+    
+    .result-item.result-highlight .result-label {
+        font-size: 0.9rem;
+    }
+    
+    .result-item.result-highlight .result-value {
+        text-align: right;
+    }
+    
+    /* Total section */
+    .result-total {
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .result-total .result-label {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+    
+    .result-total .result-value {
+        font-size: 1.5rem;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    /* Form controls */
+    .form-control {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+    
+    /* Slider adjustments */
+    .slider-wrapper {
+        padding: 15px 0 25px 0;
+    }
+    
+    .slider-value-bubble {
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 12px;
+    }
+    
+    .slider-ticks {
+        font-size: 10px;
+    }
+}
+
+/* Very small phones (max 360px) */
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+    
+    .result-total .result-value {
+        font-size: 1.3rem;
+    }
+    
+    .toggle-switch {
+        width: 50px;
+        height: 26px;
+    }
+    
+    .slider:before {
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+    }
+    
+    input:checked + .slider:before {
+        transform: translateX(24px);
+    }
+}
