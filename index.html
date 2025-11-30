@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Salaire Maroc 2025</title>
+    <!-- Google Fonts: Syne & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Icomoon Fonts -->
+    <link rel="stylesheet" href="assets/fonts/style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5 mb-4">Calculateur de Salaire Maroc 2025</h1>
+        
+        <form id="salaryForm" class="p-4 rounded shadow-sm">
+            <!-- Salaire de Base Mensuel -->
+            <div class="form-group">
+                <label for="salaireDeBaseMensuel" data-toggle="tooltip" title="Le salaire brut avant toute déduction">Salaire de Base Mensuel (MAD) <i class="icon-info-circle text-muted"></i></label>
+                <input type="text" class="form-control" id="salaireDeBaseMensuel" placeholder="Ex: 10000.00" aria-describedby="salaireDeBaseHelp salaireDeBaseError">
+                <small id="salaireDeBaseHelp" class="form-text text-muted">Entrez une valeur numérique positive supérieur au SMIG (3266.10 MAD).</small>
+                <div id="salaireDeBaseError" class="invalid-feedback">Veuillez entrer un montant valide.</div>
+            </div>
+
+            <!-- Salaire Net Mensuel -->
+            <!--
+            <div class="form-group">
+                <label for="salaireNetMensuel" data-toggle="tooltip" title="Le salaire reçu sur le compte bancaire">Salaire Net Mensuel (MAD) <i class="icon-info-circle text-muted"></i></label>
+                <input type="text" class="form-control" id="salaireNetMensuel" placeholder="Ex: 8000.00" aria-describedby="salaireNetHelp salaireNetError">
+                <small id="salaireNetHelp" class="form-text text-muted">Entrez une valeur numérique positive.</small>
+                <div id="salaireNetError" class="invalid-feedback">Veuillez entrer un montant valide.</div>
+            </div>
+            -->
+
+            <!-- Date d'Embauche -->
+            <div class="form-group">
+                <label for="dateEmbauche">Date d'embauche</label>
+                <input type="date" class="form-control" id="dateEmbauche">
+                <small id="dateEmbaucheHelp" class="form-text text-muted">Entrez une date au passé.</small>
+
+            </div>
+
+            <!-- Nombre de personnes à charge -->
+            <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="mb-0" for="chkPersonnesCharge">Avez-vous des personnes à charge ?</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkPersonnesCharge">
+                        <span class="slider">
+                            <span class="on-text">OUI</span>
+                            <span class="off-text">NON</span>
+                        </span>
+                    </label>
+                </div>
+                <div id="nbChargesContainer" style="display: none;">
+                    <label for="nbCharges" class="mt-2">Nombre de personnes à charge</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="nbCharges" min="0" max="6" value="0" step="1" class="custom-range-slider">
+                        <div class="slider-value-bubble" id="nbChargesBubble">0</div>
+                        <div class="slider-ticks">
+                            <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indemnité de Transport -->
+            <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="mb-0" for="chkIndemniteTransport">Avez-vous une Indemnité de Transport ?</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkIndemniteTransport">
+                        <span class="slider">
+                            <span class="on-text">OUI</span>
+                            <span class="off-text">NON</span>
+                        </span>
+                    </label>
+                </div>
+                <div id="indemniteTransportContainer" style="display: none;">
+                    <label for="indemniteTransport">Indemnité de Transport (MAD)</label>
+                    <input type="text" class="form-control" id="indemniteTransport" placeholder="Montant (MAD)" value="500" disabled>
+                    <small id="indemniteTransportHelp" class="form-text text-muted">Entrez une valeur numérique positive.</small>
+                </div>
+            </div>
+
+            <!-- Indemnité de Panier -->
+            <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="mb-0" for="chkIndemnitePanier">Avez-vous une Indemnité de Panier ?</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkIndemnitePanier">
+                        <span class="slider">
+                            <span class="on-text">OUI</span>
+                            <span class="off-text">NON</span>
+                        </span>
+                    </label>
+                </div>
+                <div id="indemnitePanierContainer" style="display: none;">
+                    <label for="indemnitePanier">Indemnité de Panier (MAD)</label>
+                    <input type="text" class="form-control" id="indemnitePanier" placeholder="Montant (MAD)" value="500" disabled>
+                    <small id="indemnitePanierHelp" class="form-text text-muted">Entrez une valeur numérique positive.</small>
+                </div>
+            </div>
+
+            <!-- Cotisation AMO -->
+            <div class="form-group d-flex justify-content-between align-items-center">
+                <label class="mb-0" for="chkAMO">Avez-vous la Cotisation AMO ?</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="chkAMO" checked>
+                    <span class="slider">
+                        <span class="on-text">OUI</span>
+                        <span class="off-text">NON</span>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Retraite Complémentaire (CIMR) -->
+            <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="mb-0" for="chkCIMR">Avez-vous une Cotisation CIMR ?</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkCIMR">
+                        <span class="slider">
+                            <span class="on-text">OUI</span>
+                            <span class="off-text">NON</span>
+                        </span>
+                    </label>
+                </div>
+                <div id="tauxCIMRContainer" style="display: none;">
+                    <label for="tauxCIMR" class="mt-2">Cotisation CIMR (%)</label>
+                    <div class="slider-wrapper disabled" id="tauxCIMRWrapper">
+                        <input type="range" id="tauxCIMR" min="0" max="10" value="0" step="1" class="custom-range-slider" disabled>
+                        <div class="slider-value-bubble" id="tauxCIMRBubble">0</div>
+                        <div class="slider-ticks">
+                            <span>0</span><span>5</span><span>10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'Action -->
+            <div class="form-group text-center">
+                <button type="button" id="btnCalculer" class="btn btn-primary btn-lg btn-block" disabled>Calculer</button>
+                <button type="button" id="btnReset" class="btn btn-secondary btn-lg btn-block mt-2">Réinitialiser</button>
+            </div>
+        </form>
+
+        <!-- Zone d'Affichage des Résultats -->
+        <div id="resultatCalcul" class="mt-4 mb-5 p-3 rounded border" style="display: none;" tabindex="-1" aria-live="polite">
+            <h3 class="text-center">Résultats du Calcul</h3>
+            <div id="detailsResultats">
+                <div class="result-item">
+                    <span class="result-label">Salaire de Base Mensuel :</span>
+                    <span class="result-value" id="res-salaireDeBase"></span>
+                </div>
+                <div class="result-item d-none" id="row-primeAnciennete">
+                    <span class="result-label">Prime d'Ancienneté :</span>
+                    <span class="result-value" id="res-primeAnciennete"></span>
+                </div>
+                <div class="result-item d-none" id="row-indemniteTransport">
+                    <span class="result-label">Indemnité de Transport :</span>
+                    <span class="result-value" id="res-indemniteTransport"></span>
+                </div>
+                <div class="result-item d-none" id="row-indemnitePanier">
+                    <span class="result-label">Indemnité de Panier :</span>
+                    <span class="result-value" id="res-indemnitePanier"></span>
+                </div>
+                
+                <div class="result-item result-highlight">
+                    <span class="result-label">Total Brut :</span>
+                    <span class="result-value" id="res-salaireBrutGlobal"></span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Cotisation CNSS (4.48%) :</span>
+                    <span class="result-value text-danger" id="res-cotisationCnss"></span>
+                </div>
+                <div class="result-item d-none" id="row-cotisationAmo">
+                    <span class="result-label">Cotisation AMO (2.26%) :</span>
+                    <span class="result-value text-danger" id="res-cotisationAmo"></span>
+                </div>
+                <div class="result-item d-none" id="row-cotisationCimr">
+                    <span class="result-label">Cotisation CIMR :</span>
+                    <span class="result-value text-danger" id="res-cotisationCimr"></span>
+                </div>
+
+                <div class="result-item result-highlight">
+                    <span class="result-label">Total Cotisations Salariales :</span>
+                    <span class="result-value text-danger" id="res-totalCotisations"></span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Frais Professionnels :</span>
+                    <span class="result-value text-success" id="res-fraisPro"></span>
+                </div>
+
+                <div class="result-item result-highlight">
+                    <span class="result-label">Salaire Net Imposable :</span>
+                    <span class="result-value" id="res-salaireNetImposable"></span>
+                </div>
+
+                <!-- IR Section Simple -->
+                <div class="result-item d-none" id="row-irNet-simple">
+                    <span class="result-label">Impôt sur le Revenu (IR) :</span>
+                    <span class="result-value text-danger" id="res-irNet-simple"></span>
+                </div>
+
+                <!-- IR Section Detailed -->
+                <div id="group-ir-detailed" class="d-none">
+                    <div class="result-item">
+                        <span class="result-label">IR Brut :</span>
+                        <span class="result-value" id="res-irBrut"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Déduction Charges Familiales :</span>
+                        <span class="result-value text-success" id="res-reductionFamille"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">IR Net :</span>
+                        <span class="result-value text-danger" id="res-irNet-detailed"></span>
+                    </div>
+                </div>
+
+                <div class="result-item result-total">
+                    <span class="result-label">Salaire Net à Payer :</span>
+                    <span class="result-value" id="res-salaireNetMensuel"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2025 Calculateur de Salaire Maroc. Tous droits réservés.</p>
+    </footer>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/clearable-input.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
