@@ -421,8 +421,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 20;
-        let yPos = 20;
+        const margin = 15;
+        let yPos = 15;
         
         // Couleurs du thème
         const colors = {
@@ -439,72 +439,65 @@ document.addEventListener('DOMContentLoaded', function() {
         doc.setFillColor(...colors.dark);
         doc.rect(0, 0, pageWidth, pageHeight, 'F');
         
-        // Bandeau supérieur avec gradient simulé
+        // Bandeau supérieur compact
         doc.setFillColor(...colors.primary);
-        doc.rect(0, 0, pageWidth, 45, 'F');
+        doc.rect(0, 0, pageWidth, 35, 'F');
         
         // Titre principal
         doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
+        doc.setFontSize(20);
         doc.setFont('helvetica', 'bold');
-        doc.text('BULLETIN DE SALAIRE', pageWidth / 2, 22, { align: 'center' });
+        doc.text('BULLETIN DE SALAIRE', pageWidth / 2, 15, { align: 'center' });
         
-        // Sous-titre
-        doc.setFontSize(12);
+        // Sous-titre et date sur la même ligne
+        doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text('Simulation - Loi de Finances Maroc 2025', pageWidth / 2, 32, { align: 'center' });
-        
-        // Date de génération
         const dateGeneration = new Date().toLocaleDateString('fr-FR', {
             day: '2-digit',
             month: 'long',
             year: 'numeric'
         });
-        doc.setFontSize(10);
-        doc.text(`Généré le ${dateGeneration}`, pageWidth / 2, 40, { align: 'center' });
+        doc.text(`Simulation - Loi de Finances Maroc 2025 | Généré le ${dateGeneration}`, pageWidth / 2, 26, { align: 'center' });
         
-        yPos = 55;
+        yPos = 42;
         
-        // Fonction helper pour dessiner une ligne de résultat
+        // Fonction helper pour dessiner une ligne de résultat - Version compacte
         function drawResultLine(label, value, isNegative = false, isHighlight = false, isTotal = false) {
-            const lineHeight = isTotal ? 18 : 12;
-            const cardPadding = 4;
+            const lineHeight = isTotal ? 14 : 9;
             
             if (isTotal) {
                 // Cadre total avec bordure verte
-                doc.setFillColor(16, 185, 129, 0.1);
+                doc.setFillColor(20, 60, 50);
                 doc.setDrawColor(...colors.primary);
                 doc.setLineWidth(0.5);
-                doc.roundedRect(margin, yPos - 2, pageWidth - 2 * margin, lineHeight + 4, 3, 3, 'FD');
+                doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 2, 2, 2, 'FD');
                 
                 // Barre latérale verte
                 doc.setFillColor(...colors.primary);
-                doc.rect(margin, yPos - 2, 3, lineHeight + 4, 'F');
+                doc.rect(margin, yPos - 1, 2.5, lineHeight + 2, 'F');
             } else if (isHighlight) {
                 // Fond légèrement plus clair pour les sous-totaux
                 doc.setFillColor(40, 52, 75);
-                doc.roundedRect(margin, yPos - 2, pageWidth - 2 * margin, lineHeight + 2, 2, 2, 'F');
+                doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 1, 1.5, 1.5, 'F');
             }
             
             // Label
             doc.setTextColor(...(isTotal ? colors.primary : (isHighlight ? colors.text : colors.muted)));
-            doc.setFontSize(isTotal ? 11 : 10);
+            doc.setFontSize(isTotal ? 10 : 9);
             doc.setFont('helvetica', isTotal || isHighlight ? 'bold' : 'normal');
-            doc.text(label, margin + 6, yPos + 6);
+            doc.text(label, margin + 4, yPos + (isTotal ? 5 : 4));
             
             // Valeur
             if (isNegative) {
                 doc.setTextColor(...colors.danger);
-            } else if (isTotal) {
-                doc.setTextColor(...colors.text);
             } else {
                 doc.setTextColor(...colors.text);
             }
-            doc.setFontSize(isTotal ? 14 : 11);
+            doc.setFontSize(isTotal ? 12 : 9);
             doc.setFont('helvetica', 'bold');
-            doc.text(value, pageWidth - margin - 6, yPos + 6, { align: 'right' });
+            doc.text(value, pageWidth - margin - 4, yPos + (isTotal ? 5 : 4), { align: 'right' });
             
-            yPos += lineHeight + 3;
+            yPos += lineHeight + 1.5;
         }
         
         // Fonction pour formater les montants
@@ -512,16 +505,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return prefix + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' MAD';
         }
         
-        // Section: Rémunération
-        doc.setFillColor(...colors.card);
-        doc.roundedRect(margin - 2, yPos, pageWidth - 2 * margin + 4, 8, 2, 2, 'F');
-        doc.setTextColor(...colors.accent);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('RÉMUNÉRATION', margin + 4, yPos + 5.5);
-        yPos += 14;
+        // Fonction pour dessiner un titre de section compact
+        function drawSectionTitle(title, color) {
+            doc.setFillColor(...colors.card);
+            doc.roundedRect(margin, yPos, pageWidth - 2 * margin, 6, 1.5, 1.5, 'F');
+            doc.setTextColor(...color);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.text(title, margin + 3, yPos + 4.2);
+            yPos += 9;
+        }
         
-        // Lignes de rémunération
+        // Section: Rémunération
+        drawSectionTitle('RÉMUNÉRATION', colors.accent);
+        
         drawResultLine('Salaire de Base Mensuel', fmt(res.salaireDeBase));
         
         if (res.primeAnciennete > 0) {
@@ -536,18 +533,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         drawResultLine('TOTAL BRUT', fmt(res.salaireBrutGlobal), false, true);
         
-        yPos += 5;
+        yPos += 3;
         
         // Section: Cotisations
-        doc.setFillColor(...colors.card);
-        doc.roundedRect(margin - 2, yPos, pageWidth - 2 * margin + 4, 8, 2, 2, 'F');
-        doc.setTextColor(...colors.danger);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('COTISATIONS SALARIALES', margin + 4, yPos + 5.5);
-        yPos += 14;
+        drawSectionTitle('COTISATIONS SALARIALES', colors.danger);
         
-        // Lignes de cotisations
         drawResultLine('Cotisation CNSS (4.48%)', fmt(res.cotisationCnss, '-'), true);
         
         if (res.cotisationAmo > 0) {
@@ -560,16 +550,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalCotisations = res.cotisationCnss + res.cotisationAmo + res.cotisationCimr;
         drawResultLine('TOTAL COTISATIONS', fmt(totalCotisations, '-'), true, true);
         
-        yPos += 5;
+        yPos += 3;
         
         // Section: Fiscalité
-        doc.setFillColor(...colors.card);
-        doc.roundedRect(margin - 2, yPos, pageWidth - 2 * margin + 4, 8, 2, 2, 'F');
-        doc.setTextColor(...colors.accent);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('FISCALITÉ', margin + 4, yPos + 5.5);
-        yPos += 14;
+        drawSectionTitle('FISCALITÉ', colors.accent);
         
         drawResultLine('Frais Professionnels (déductibles)', fmt(res.fraisPro, '-'));
         drawResultLine('Salaire Net Imposable', fmt(res.salaireNetImposable), false, true);
@@ -580,23 +564,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         drawResultLine('Impôt sur le Revenu (IR)', fmt(res.irNet, '-'), true);
         
-        yPos += 10;
+        yPos += 6;
         
-        // Total Net à Payer
+        // Total Net à Payer - Plus grand et visible
         drawResultLine('SALAIRE NET À PAYER', fmt(res.salaireNetMensuel), false, false, true);
         
-        // Pied de page
-        yPos = pageHeight - 25;
+        // Pied de page - Position fixe en bas
+        const footerY = pageHeight - 18;
         doc.setDrawColor(...colors.muted);
         doc.setLineWidth(0.2);
-        doc.line(margin, yPos, pageWidth - margin, yPos);
+        doc.line(margin, footerY, pageWidth - margin, footerY);
         
         doc.setTextColor(...colors.muted);
-        doc.setFontSize(8);
+        doc.setFontSize(7);
         doc.setFont('helvetica', 'normal');
-        doc.text('Ce document est une simulation basée sur les règles de la Loi de Finances 2025 du Maroc.', pageWidth / 2, yPos + 6, { align: 'center' });
-        doc.text('Il ne constitue pas un document officiel et ne peut être utilisé à des fins administratives.', pageWidth / 2, yPos + 11, { align: 'center' });
-        doc.text('Calculateur de Salaire Maroc 2025 - © ' + new Date().getFullYear(), pageWidth / 2, yPos + 18, { align: 'center' });
+        doc.text('Ce document est une simulation basée sur les règles de la Loi de Finances 2025 du Maroc.', pageWidth / 2, footerY + 4, { align: 'center' });
+        doc.text('Il ne constitue pas un document officiel et ne peut être utilisé à des fins administratives.', pageWidth / 2, footerY + 8, { align: 'center' });
+        doc.text('Calculateur de Salaire Maroc 2025 - © ' + new Date().getFullYear(), pageWidth / 2, footerY + 13, { align: 'center' });
         
         // Téléchargement du PDF
         const fileName = `bulletin_salaire_${new Date().toISOString().slice(0, 10)}.pdf`;
