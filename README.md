@@ -5,7 +5,7 @@ Interface utilisateur pour le calcul du salaire net à partir du brut pour les s
 ## 🌐 Déploiement
 
 Ce frontend est déployé sur **GitHub Pages** :
-- **URL** : https://naboulsi92.github.io/Calculateur-Salaire-Maroc/
+- **URL** : https://naboulsi92.github.io/calculateur-salaire-frontend/
 
 ## 🏗️ Architecture
 
@@ -52,7 +52,7 @@ const API_BASE_URL = "https://calculateur-salaire-backend.vercel.app";
 
 2. **Pousser sur GitHub** :
    ```bash
-   git remote add origin https://github.com/Naboulsi92/Calculateur-Salaire-Maroc.git
+   git remote add origin https://github.com/Naboulsi92/calculateur-salaire-frontend.git
    git branch -M main
    git push -u origin main
    ```
