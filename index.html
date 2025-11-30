@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="assets/fonts/style.css">
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <!-- jsPDF pour l'export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -234,6 +236,13 @@
                     <span class="result-label">Salaire Net à Payer :</span>
                     <span class="result-value" id="res-salaireNetMensuel"></span>
                 </div>
+            </div>
+            
+            <!-- Bouton Export PDF -->
+            <div class="text-center mt-4">
+                <button type="button" id="btnExportPDF" class="btn btn-export-pdf">
+                    <i class="icon-file-pdf"></i> Télécharger en PDF
+                </button>
             </div>
         </div>
     </div>
