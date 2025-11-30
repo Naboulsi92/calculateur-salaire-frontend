@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnReset = document.getElementById('btnReset');
     const resultatCalculDiv = document.getElementById('resultatCalcul');
     const detailsResultatsDiv = document.getElementById('detailsResultats');
-    
-    // Variable pour stocker les derniers résultats calculés (pour l'export PDF)
-    let derniersResultats = null;
 
     // Initialisation des tooltips Bootstrap
     $('[data-toggle="tooltip"]').tooltip();
@@ -295,8 +292,10 @@ document.addEventListener('DOMContentLoaded', function() {
      * Affiche les résultats dans le DOM.
      */
     function afficherResultats(res) {
-        // Sauvegarder les résultats pour l'export PDF
-        derniersResultats = res;
+        // Sauvegarder les résultats pour l'export PDF (module externe)
+        if (typeof sauvegarderResultatsPourPDF === 'function') {
+            sauvegarderResultatsPourPDF(res);
+        }
         
         const totalCotisations = res.cotisationCnss + res.cotisationAmo + res.cotisationCimr;
 
@@ -392,198 +391,4 @@ document.addEventListener('DOMContentLoaded', function() {
             // alert('La date d\'embauche ne peut pas être une date future.');
         }
     });
-
-    // =========================================================================
-    // EXPORT PDF - Génération d'un bulletin de salaire stylisé
-    // =========================================================================
-    const btnExportPDF = document.getElementById('btnExportPDF');
-
-    btnExportPDF.addEventListener('click', function() {
-        if (!derniersResultats) {
-            alert('Veuillez d\'abord effectuer un calcul.');
-            return;
-        }
-        
-        genererPDF(derniersResultats);
-    });
-
-    /**
-     * Génère un PDF stylisé avec les résultats du calcul
-     * @param {Object} res - Les résultats du calcul
-     */
-    function genererPDF(res) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
-        
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 15;
-        let yPos = 15;
-        
-        // Couleurs du thème
-        const colors = {
-            primary: [16, 185, 129],      // Emerald
-            danger: [239, 68, 68],        // Red
-            dark: [15, 23, 42],           // Slate 900
-            card: [30, 41, 59],           // Slate 800
-            text: [248, 250, 252],        // Slate 50
-            muted: [148, 163, 184],       // Slate 400
-            accent: [245, 158, 11]        // Amber
-        };
-        
-        // Fond sombre
-        doc.setFillColor(...colors.dark);
-        doc.rect(0, 0, pageWidth, pageHeight, 'F');
-        
-        // Bandeau supérieur compact
-        doc.setFillColor(...colors.primary);
-        doc.rect(0, 0, pageWidth, 35, 'F');
-        
-        // Titre principal
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(20);
-        doc.setFont('helvetica', 'bold');
-        doc.text('BULLETIN DE SALAIRE', pageWidth / 2, 15, { align: 'center' });
-        
-        // Sous-titre et date sur la même ligne
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        const dateGeneration = new Date().toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        doc.text(`Simulation - Loi de Finances Maroc 2025 | Généré le ${dateGeneration}`, pageWidth / 2, 26, { align: 'center' });
-        
-        yPos = 42;
-        
-        // Fonction helper pour dessiner une ligne de résultat - Version compacte
-        function drawResultLine(label, value, isNegative = false, isHighlight = false, isTotal = false) {
-            const lineHeight = isTotal ? 14 : 9;
-            
-            if (isTotal) {
-                // Cadre total avec bordure verte
-                doc.setFillColor(20, 60, 50);
-                doc.setDrawColor(...colors.primary);
-                doc.setLineWidth(0.5);
-                doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 2, 2, 2, 'FD');
-                
-                // Barre latérale verte
-                doc.setFillColor(...colors.primary);
-                doc.rect(margin, yPos - 1, 2.5, lineHeight + 2, 'F');
-            } else if (isHighlight) {
-                // Fond légèrement plus clair pour les sous-totaux
-                doc.setFillColor(40, 52, 75);
-                doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 1, 1.5, 1.5, 'F');
-            }
-            
-            // Label
-            doc.setTextColor(...(isTotal ? colors.primary : (isHighlight ? colors.text : colors.muted)));
-            doc.setFontSize(isTotal ? 10 : 9);
-            doc.setFont('helvetica', isTotal || isHighlight ? 'bold' : 'normal');
-            doc.text(label, margin + 4, yPos + (isTotal ? 5 : 4));
-            
-            // Valeur
-            if (isNegative) {
-                doc.setTextColor(...colors.danger);
-            } else {
-                doc.setTextColor(...colors.text);
-            }
-            doc.setFontSize(isTotal ? 12 : 9);
-            doc.setFont('helvetica', 'bold');
-            doc.text(value, pageWidth - margin - 4, yPos + (isTotal ? 5 : 4), { align: 'right' });
-            
-            yPos += lineHeight + 1.5;
-        }
-        
-        // Fonction pour formater les montants
-        function fmt(amount, prefix = '') {
-            return prefix + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' MAD';
-        }
-        
-        // Fonction pour dessiner un titre de section compact
-        function drawSectionTitle(title, color) {
-            doc.setFillColor(...colors.card);
-            doc.roundedRect(margin, yPos, pageWidth - 2 * margin, 6, 1.5, 1.5, 'F');
-            doc.setTextColor(...color);
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'bold');
-            doc.text(title, margin + 3, yPos + 4.2);
-            yPos += 9;
-        }
-        
-        // Section: Rémunération
-        drawSectionTitle('RÉMUNÉRATION', colors.accent);
-        
-        drawResultLine('Salaire de Base Mensuel', fmt(res.salaireDeBase));
-        
-        if (res.primeAnciennete > 0) {
-            drawResultLine('Prime d\'Ancienneté', fmt(res.primeAnciennete));
-        }
-        if (res.indemniteTransport > 0) {
-            drawResultLine('Indemnité de Transport', fmt(res.indemniteTransport));
-        }
-        if (res.indemnitePanier > 0) {
-            drawResultLine('Indemnité de Panier', fmt(res.indemnitePanier));
-        }
-        
-        drawResultLine('TOTAL BRUT', fmt(res.salaireBrutGlobal), false, true);
-        
-        yPos += 3;
-        
-        // Section: Cotisations
-        drawSectionTitle('COTISATIONS SALARIALES', colors.danger);
-        
-        drawResultLine('Cotisation CNSS (4.48%)', fmt(res.cotisationCnss, '-'), true);
-        
-        if (res.cotisationAmo > 0) {
-            drawResultLine('Cotisation AMO (2.26%)', fmt(res.cotisationAmo, '-'), true);
-        }
-        if (res.cotisationCimr > 0) {
-            drawResultLine('Cotisation CIMR', fmt(res.cotisationCimr, '-'), true);
-        }
-        
-        const totalCotisations = res.cotisationCnss + res.cotisationAmo + res.cotisationCimr;
-        drawResultLine('TOTAL COTISATIONS', fmt(totalCotisations, '-'), true, true);
-        
-        yPos += 3;
-        
-        // Section: Fiscalité
-        drawSectionTitle('FISCALITÉ', colors.accent);
-        
-        drawResultLine('Frais Professionnels (déductibles)', fmt(res.fraisPro, '-'));
-        drawResultLine('Salaire Net Imposable', fmt(res.salaireNetImposable), false, true);
-        
-        if (res.reductionFamille > 0) {
-            drawResultLine('IR Brut', fmt(res.irBrut));
-            drawResultLine('Déduction Charges Familiales', fmt(res.reductionFamille, '-'));
-        }
-        drawResultLine('Impôt sur le Revenu (IR)', fmt(res.irNet, '-'), true);
-        
-        yPos += 6;
-        
-        // Total Net à Payer - Plus grand et visible
-        drawResultLine('SALAIRE NET À PAYER', fmt(res.salaireNetMensuel), false, false, true);
-        
-        // Pied de page - Position fixe en bas
-        const footerY = pageHeight - 18;
-        doc.setDrawColor(...colors.muted);
-        doc.setLineWidth(0.2);
-        doc.line(margin, footerY, pageWidth - margin, footerY);
-        
-        doc.setTextColor(...colors.muted);
-        doc.setFontSize(7);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Ce document est une simulation basée sur les règles de la Loi de Finances 2025 du Maroc.', pageWidth / 2, footerY + 4, { align: 'center' });
-        doc.text('Il ne constitue pas un document officiel et ne peut être utilisé à des fins administratives.', pageWidth / 2, footerY + 8, { align: 'center' });
-        doc.text('Calculateur de Salaire Maroc 2025 - © ' + new Date().getFullYear(), pageWidth / 2, footerY + 13, { align: 'center' });
-        
-        // Téléchargement du PDF
-        const fileName = `bulletin_salaire_${new Date().toISOString().slice(0, 10)}.pdf`;
-        doc.save(fileName);
-    }
 });
