@@ -99,8 +99,8 @@ function genererPDF(res) {
             doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 3, 3, 3, 'FD');
             
             // Barre latérale verte
-            doc.setFillColor(...colors.primary);
-            doc.rect(margin, yPos - 1, 3, lineHeight + 3, 'F');
+            // doc.setFillColor(...colors.primary);
+            // doc.rect(margin, yPos - 1, 3, lineHeight + 3, 'F');
         } else if (isHighlight) {
             // Fond légèrement plus clair pour les sous-totaux
             doc.setFillColor(40, 52, 75);
@@ -191,12 +191,12 @@ function genererPDF(res) {
     drawResultLine('Salaire Net Imposable', fmt(res.salaireNetImposable), false, true);
     
     if (res.reductionFamille > 0) {
-        drawResultLine('IR Brut', fmt(res.irBrut));
-        drawResultLine('Déduction Charges Familiales', fmt(res.reductionFamille, '-'));
+        drawResultLine('IR Brut', fmt(res.irBrut, '-'));
+        drawResultLine('Déduction Charges Familiales', fmt(res.reductionFamille));
     }
     drawResultLine('Impôt sur le Revenu (IR)', fmt(res.irNet, '-'), true);
     
-    yPos += 5;
+    yPos += 4;
     
     // =====================
     // Total Net à Payer
