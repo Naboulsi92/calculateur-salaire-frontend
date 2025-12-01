@@ -96,7 +96,7 @@ function genererPDF(res) {
             doc.setFillColor(20, 60, 50);
             doc.setDrawColor(...colors.primary);
             doc.setLineWidth(0.8);
-            doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 3, 3, 3, 'FD');
+            doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 2, 3, 3, 'FD');
             
             // Barre latérale verte
             // doc.setFillColor(...colors.primary);
@@ -104,7 +104,7 @@ function genererPDF(res) {
         } else if (isHighlight) {
             // Fond légèrement plus clair pour les sous-totaux
             doc.setFillColor(40, 52, 75);
-            doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 1, 2, 2, 'F');
+            doc.roundedRect(margin, yPos - 1, pageWidth - 2 * margin, lineHeight + 0.5, 2, 2, 'F');
         }
         
         // Label
@@ -123,7 +123,7 @@ function genererPDF(res) {
         doc.setFont('helvetica', 'bold');
         doc.text(value, pageWidth - margin - 5, yPos + (isTotal ? 6 : 5), { align: 'right' });
         
-        yPos += lineHeight + 2;
+        yPos += lineHeight + 1.5;
     }
     
     // Fonction pour formater les montants
