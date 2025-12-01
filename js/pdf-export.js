@@ -65,7 +65,7 @@ function genererPDF(res) {
     
     // Bandeau supérieur
     doc.setFillColor(...colors.primary);
-    doc.rect(0, 0, pageWidth, 40, 'F');
+    doc.rect(0, 0, pageWidth, 35, 'F');
     
     // Titre principal
     doc.setTextColor(255, 255, 255);
@@ -196,7 +196,7 @@ function genererPDF(res) {
     }
     drawResultLine('Impôt sur le Revenu (IR)', fmt(res.irNet, '-'), true);
     
-    yPos += 8;
+    yPos += 5;
     
     // =====================
     // Total Net à Payer
