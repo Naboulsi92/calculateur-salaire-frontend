@@ -335,13 +335,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         setVal('res-totalCotisations', totalCotisations, true, '-');
         setVal('res-fraisPro', res.fraisPro, true, '-');
-        setVal('res-salaireNetImposable', res.salaireNetImposable);
+        setVal('res-salaireNetImposable', res.salaireNetImposable, true);
 
         if (res.reductionFamille > 0) {
             showRow('row-irNet-simple', false);
             showRow('group-ir-detailed', true);
-            setVal('res-irBrut', res.irBrut);
-            setVal('res-reductionFamille', res.reductionFamille, true, '-');
+            setVal('res-irBrut', res.irBrut, true, '-');
+            setVal('res-reductionFamille', res.reductionFamille, true);
             setVal('res-irNet-detailed', res.irNet, true, '-');
         } else {
             showRow('row-irNet-simple', true);
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setVal('res-irNet-simple', res.irNet, true, '-');
         }
 
-        setVal('res-salaireNetMensuel', res.salaireNetMensuel);
+        setVal('res-salaireNetMensuel', res.salaireNetMensuel, true);
 
         resultatCalculDiv.style.display = 'block';
         
