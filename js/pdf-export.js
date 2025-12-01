@@ -73,21 +73,19 @@ function genererPDF(res) {
     doc.setFont('helvetica', 'bold');
     doc.text('BULLETIN DE SALAIRE', pageWidth / 2, 18, { align: 'center' });
     
-    // Sous-titre
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Simulation - Loi de Finances Maroc 2025', pageWidth / 2, 28, { align: 'center' });
-    
     // Date de génération
     const dateGeneration = new Date().toLocaleDateString('fr-FR', {
         day: '2-digit',
         month: 'long',
         year: 'numeric'
     });
-    doc.setFontSize(10);
-    doc.text(`Généré le ${dateGeneration}`, pageWidth / 2, 36, { align: 'center' });
+
+    // Sous-titre
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Simulation - Loi de Finances Maroc 2025 | Généré le ${dateGeneration}`, pageWidth / 2, 28, { align: 'center' });
     
-    yPos = 50;
+    yPos = 40;
     
     // Fonction helper pour dessiner une ligne de résultat
     function drawResultLine(label, value, isNegative = false, isHighlight = false, isTotal = false) {
@@ -218,7 +216,7 @@ function genererPDF(res) {
     doc.setFont('helvetica', 'normal');
     doc.text('Ce document est une simulation basée sur les règles de la Loi de Finances 2025 du Maroc.', pageWidth / 2, footerY + 5, { align: 'center' });
     doc.text('Il ne constitue pas un document officiel et ne peut être utilisé à des fins administratives.', pageWidth / 2, footerY + 10, { align: 'center' });
-    doc.text('Calculateur de Salaire Maroc 2025 - © ' + new Date().getFullYear(), pageWidth / 2, footerY + 15, { align: 'center' });
+    doc.text('Calculateur de Salaire Maroc - © ' + new Date().getFullYear(), pageWidth / 2, footerY + 15, { align: 'center' });
     
     // Téléchargement du PDF
     const fileName = `bulletin_salaire_${new Date().toISOString().slice(0, 10)}.pdf`;
